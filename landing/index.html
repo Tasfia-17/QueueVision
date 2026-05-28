@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QueueVision - Mobile Moderation Intelligence</title>
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #000000;
+      --white:   #ffffff;
+      --border:  #171717;
+      --ash:     #f5f5f5;
+      --green:   #a3e635;
+      --mint:    #d2fae5;
+      --lavender:#fae9ff;
+      --saffron: #fef3c8;
+      --shadow:  rgb(10,10,13);
+      --font:    'Satoshi', system-ui, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--ink);
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Nav ── */
+    nav {
+      position: sticky; top: 0; z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 32px;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-logo {
+      display: flex; align-items: center; gap: 8px;
+      font-weight: 700; font-size: 18px;
+    }
+    .nav-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--green); border: 1px solid var(--border);
+    }
+    .nav-links { display: flex; gap: 24px; font-size: 14px; font-weight: 500; }
+    .nav-links a:hover { text-decoration: underline; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px; border-radius: 4px; font-weight: 700;
+      font-size: 14px; border: 1px solid var(--border); cursor: pointer;
+      font-family: var(--font); transition: transform 0.1s;
+      box-shadow: 2px 2px 0 var(--shadow);
+    }
+    .btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--shadow); }
+    .btn-primary { background: var(--green); color: var(--ink); }
+    .btn-ghost   { background: var(--white); color: var(--ink); }
+
+    /* ── Hero ── */
+    .hero {
+      max-width: 900px; margin: 0 auto;
+      padding: 80px 32px 64px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 100px;
+      border: 1px solid var(--border); font-size: 12px; font-weight: 700;
+      background: var(--saffron); margin-bottom: 24px;
+      box-shadow: 1px 1px 0 var(--shadow);
+    }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 64px); font-weight: 700;
+      line-height: 1.1; margin-bottom: 20px;
+    }
+    .hero h1 span { background: var(--green); padding: 0 6px; }
+    .hero p {
+      font-size: 18px; max-width: 600px; margin: 0 auto 36px;
+      color: #404040; line-height: 1.6;
+    }
+    .hero-cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+    /* ── Problem / Solution ── */
+    .section { padding: 64px 32px; max-width: 900px; margin: 0 auto; }
+    .section-label {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; opacity: 0.5; margin-bottom: 12px;
+    }
+    .section h2 { font-size: clamp(24px, 4vw, 36px); font-weight: 700; margin-bottom: 16px; }
+    .section p  { font-size: 16px; color: #404040; line-height: 1.7; max-width: 680px; }
+
+    .problem-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px; margin-top: 32px;
+    }
+    .problem-card {
+      padding: 20px; border: 1px solid var(--border); border-radius: 8px;
+      background: var(--ash); box-shadow: 2px 2px 0 var(--shadow);
+    }
+    .problem-card .icon { font-size: 24px; margin-bottom: 10px; }
+    .problem-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .problem-card p  { font-size: 13px; color: #525252; line-height: 1.6; }
+
+    /* ── Features ── */
+    .features-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px; margin-top: 32px;
+    }
+    .feature-card {
+      padding: 24px; border: 1px solid var(--border); border-radius: 8px;
+      box-shadow: 3px 3px 0 var(--shadow); transition: transform 0.15s;
+    }
+    .feature-card:hover { transform: translate(-1px,-1px); }
+    .feature-card.mint     { background: var(--mint); }
+    .feature-card.lavender { background: var(--lavender); }
+    .feature-card.saffron  { background: var(--saffron); }
+    .feature-card.green    { background: var(--green); }
+    .feature-card .icon { font-size: 28px; margin-bottom: 12px; }
+    .feature-card h3 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+    .feature-card p  { font-size: 13px; color: #404040; line-height: 1.6; }
+
+    /* ── How it works ── */
+    .steps {
+      display: flex; flex-direction: column; gap: 0; margin-top: 32px;
+      border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+      box-shadow: 3px 3px 0 var(--shadow);
+    }
+    .step {
+      display: flex; align-items: flex-start; gap: 20px;
+      padding: 24px; border-bottom: 1px solid var(--border);
+      background: var(--white);
+    }
+    .step:last-child { border-bottom: none; }
+    .step:nth-child(even) { background: var(--ash); }
+    .step-num {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      background: var(--green); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 14px; box-shadow: 1px 1px 0 var(--shadow);
+    }
+    .step h3 { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .step p  { font-size: 13px; color: #525252; line-height: 1.6; }
+
+    /* ── Stats ── */
+    .stats-row {
+      display: flex; gap: 16px; flex-wrap: wrap; margin-top: 32px;
+    }
+    .stat-box {
+      flex: 1; min-width: 160px; padding: 24px;
+      border: 1px solid var(--border); border-radius: 8px;
+      box-shadow: 2px 2px 0 var(--shadow); text-align: center;
+    }
+    .stat-box .num { font-size: 36px; font-weight: 700; line-height: 1; }
+    .stat-box .lbl { font-size: 13px; color: #525252; margin-top: 6px; }
+
+    /* ── CTA Banner ── */
+    .cta-banner {
+      margin: 0 32px 64px; padding: 48px 32px;
+      border: 1px solid var(--border); border-radius: 12px;
+      background: var(--green); box-shadow: 4px 4px 0 var(--shadow);
+      text-align: center;
+    }
+    .cta-banner h2 { font-size: clamp(22px, 4vw, 32px); font-weight: 700; margin-bottom: 12px; }
+    .cta-banner p  { font-size: 16px; margin-bottom: 28px; max-width: 500px; margin-left: auto; margin-right: auto; }
+    .cta-banner .btn-ghost { background: var(--white); }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 12px;
+      font-size: 13px; color: #737373;
+    }
+    footer a:hover { text-decoration: underline; }
+
+    /* ── Divider ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: 0 32px; }
+
+    /* ── App preview mockup ── */
+    .mockup-wrap {
+      max-width: 900px; margin: 0 auto 64px; padding: 0 32px;
+    }
+    .mockup {
+      border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; box-shadow: 6px 6px 0 var(--shadow);
+    }
+    .mockup-bar {
+      background: var(--ash); border-bottom: 1px solid var(--border);
+      padding: 10px 16px; display: flex; align-items: center; gap: 8px;
+    }
+    .mockup-dot { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--border); }
+    .mockup-dot.red    { background: #ef4444; }
+    .mockup-dot.yellow { background: #f59e0b; }
+    .mockup-dot.green  { background: #22c55e; }
+    .mockup-title { font-size: 12px; font-weight: 700; margin-left: 8px; opacity: 0.6; }
+    .mockup-body {
+      background: var(--white); padding: 20px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .mock-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; background: var(--ash);
+      border: 1px solid var(--border); border-radius: 6px;
+    }
+    .mock-logo { display: flex; align-items: center; gap: 6px; font-weight: 700; font-size: 14px; }
+    .mock-tabs { display: flex; gap: 6px; }
+    .mock-tab {
+      padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700;
+      border: 1px solid var(--border);
+    }
+    .mock-tab.active { background: var(--green); }
+    .mock-tab:not(.active) { background: var(--white); opacity: 0.6; }
+    .mock-items { display: flex; flex-direction: column; gap: 8px; }
+    .mock-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px;
+      box-shadow: 1px 1px 0 var(--shadow);
+    }
+    .mock-item.urgent  { border-left: 3px solid #ef4444; background: #fff5f5; }
+    .mock-item.standard{ border-left: 3px solid #f59e0b; background: #fffbeb; }
+    .mock-item.batch   { border-left: 3px solid #22c55e; background: var(--mint); }
+    .mock-score {
+      width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
+      border: 1px solid var(--border); display: flex; align-items: center;
+      justify-content: center; font-weight: 700; font-size: 11px;
+    }
+    .mock-score.urgent   { background: #fee2e2; }
+    .mock-score.standard { background: #fef3c8; }
+    .mock-score.batch    { background: var(--mint); }
+    .mock-text { flex: 1; }
+    .mock-title { font-size: 12px; font-weight: 700; }
+    .mock-meta  { font-size: 10px; color: #737373; margin-top: 2px; }
+    .mock-btn {
+      padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 700;
+      border: 1px solid var(--border); background: var(--green);
+      box-shadow: 1px 1px 0 var(--shadow);
+    }
+
+    @media (max-width: 600px) {
+      nav { padding: 12px 16px; }
+      .nav-links { display: none; }
+      .hero { padding: 48px 16px 40px; }
+      .section { padding: 48px 16px; }
+      .mockup-wrap { padding: 0 16px; }
+      .cta-banner { margin: 0 16px 48px; padding: 32px 20px; }
+      footer { padding: 20px 16px; }
+      .divider { margin: 0 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-logo">
+    <div class="nav-dot"></div>
+    QueueVision
+  </div>
+  <div class="nav-links">
+    <a href="#problem">Problem</a>
+    <a href="#features">Features</a>
+    <a href="#how-it-works">How it works</a>
+    <a href="https://github.com/Tasfia-17/QueueVision" target="_blank">GitHub</a>
+  </div>
+  <a href="app/index.html" class="btn btn-primary">Open App &rarr;</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">🏆 Reddit Mod Tools Hackathon 2026</div>
+  <h1>Moderation that<br><span>actually works</span><br>on mobile</h1>
+  <p>Reddit's modqueue on mobile is a blind spot. QueueVision gives moderators full context, risk scoring, and one-tap actions - right where they are.</p>
+  <div class="hero-cta">
+    <a href="app/index.html" class="btn btn-primary">Open App &rarr;</a>
+    <a href="https://github.com/Tasfia-17/QueueVision" target="_blank" class="btn btn-ghost">View on GitHub</a>
+  </div>
+</section>
+
+<!-- App mockup -->
+<div class="mockup-wrap">
+  <div class="mockup">
+    <div class="mockup-bar">
+      <div class="mockup-dot red"></div>
+      <div class="mockup-dot yellow"></div>
+      <div class="mockup-dot green"></div>
+      <div class="mockup-title">QueueVision - Moderation Dashboard</div>
+    </div>
+    <div class="mockup-body">
+      <div class="mock-topbar">
+        <div class="mock-logo"><div style="width:8px;height:8px;border-radius:50%;background:#a3e635;border:1px solid #000"></div> QueueVision</div>
+        <div class="mock-tabs">
+          <div class="mock-tab active">📋 Queue</div>
+          <div class="mock-tab">🔍 Investigate</div>
+          <div class="mock-tab">⚙️ Settings</div>
+        </div>
+      </div>
+      <div class="mock-items">
+        <div class="mock-item urgent">
+          <div class="mock-score urgent">87</div>
+          <div class="mock-text">
+            <div class="mock-title">Spam link in comments - multiple reports</div>
+            <div class="mock-meta">u/throwaway_acct · comment · ⚑ 5 reports</div>
+          </div>
+          <div class="mock-btn">⚡ Claim</div>
+        </div>
+        <div class="mock-item standard">
+          <div class="mock-score standard">52</div>
+          <div class="mock-text">
+            <div class="mock-title">Possible misinformation post flagged by AutoMod</div>
+            <div class="mock-meta">u/news_poster · post · AutoMod</div>
+          </div>
+          <div class="mock-btn">⚡ Claim</div>
+        </div>
+        <div class="mock-item batch">
+          <div class="mock-score batch">18</div>
+          <div class="mock-text">
+            <div class="mock-title">Off-topic discussion thread</div>
+            <div class="mock-meta">u/regular_user · post · ⚑ 1 report</div>
+          </div>
+          <div class="mock-btn">⚡ Claim</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider" />
+
+<!-- Problem -->
+<section class="section" id="problem">
+  <div class="section-label">The Problem</div>
+  <h2>Mobile moderation is broken</h2>
+  <p>Over 60% of Reddit moderators use mobile as their primary device, yet the native modqueue gives them almost no context to make good decisions. The result: slow responses, wrong calls, and mod burnout.</p>
+
+  <div class="problem-grid">
+    <div class="problem-card">
+      <div class="icon">🕳️</div>
+      <h3>Zero context</h3>
+      <p>The default queue shows a title and a report reason. No thread history, no user background, no prior mod actions. Mods are flying blind.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">💥</div>
+      <h3>Mod collisions</h3>
+      <p>Two mods act on the same item simultaneously. One approves, one removes. No coordination layer means wasted effort and contradictory outcomes.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">🐢</div>
+      <h3>Slow triage</h3>
+      <p>Every decision requires opening the post, checking the user profile, reviewing mod notes - in separate tabs. A 30-second decision takes 5 minutes.</p>
+    </div>
+    <div class="problem-card">
+      <div class="icon">📵</div>
+      <h3>No prioritization</h3>
+      <p>Urgent spam sits next to low-risk off-topic posts with no visual distinction. High-impact items get buried under noise.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- Solution / Features -->
+<section class="section" id="features">
+  <div class="section-label">The Solution</div>
+  <h2>Everything a mod needs, in one tap</h2>
+  <p>QueueVision is a Devvit app that replaces the modqueue experience with a full-context decision cockpit - built mobile-first, zero configuration required.</p>
+
+  <div class="features-grid">
+    <div class="feature-card mint">
+      <div class="icon">🧵</div>
+      <h3>ThreadRecon</h3>
+      <p>See the full conversation: parent chain, reported comment highlighted, sibling context, thread stats, and report density - all in one panel.</p>
+    </div>
+    <div class="feature-card lavender">
+      <div class="icon">👤</div>
+      <h3>UserRadar</h3>
+      <p>Instant user intelligence: account age, community karma, prior mod actions, mod notes, and risk flags like new account or prior ban.</p>
+    </div>
+    <div class="feature-card saffron">
+      <div class="icon">⚡</div>
+      <h3>ActionPalette</h3>
+      <p>One-tap macros for Approve, Clean Remove, Spam Ban, Mute, Warn & Release. High-risk actions get a 3-second undo window.</p>
+    </div>
+    <div class="feature-card green">
+      <div class="icon">🔒</div>
+      <h3>ClaimLock</h3>
+      <p>Claim an item before acting. Realtime pub/sub shows teammates what's being handled, eliminating duplicate work and contradictory decisions.</p>
+    </div>
+    <div class="feature-card mint">
+      <div class="icon">📊</div>
+      <h3>SmartQueue</h3>
+      <p>Risk scoring algorithm buckets items into Urgent / Standard / Batch based on report count, account age, karma, and AutoMod flags.</p>
+    </div>
+    <div class="feature-card lavender">
+      <div class="icon">📋</div>
+      <h3>ModTrail</h3>
+      <p>Full audit log of every action taken on an item. Accountability for the team, context for the next mod who picks it up.</p>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- Stats -->
+<section class="section">
+  <div class="section-label">Impact</div>
+  <h2>Built for real moderation workloads</h2>
+  <div class="stats-row">
+    <div class="stat-box">
+      <div class="num">~5 min</div>
+      <div class="lbl">saved per complex moderation decision</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">0</div>
+      <div class="lbl">config required - works on install</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">3s</div>
+      <div class="lbl">undo window on destructive actions</div>
+    </div>
+    <div class="stat-box">
+      <div class="num">6</div>
+      <div class="lbl">one-tap macro workflows built in</div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- How it works -->
+<section class="section" id="how-it-works">
+  <div class="section-label">How it works</div>
+  <h2>From report to resolution in seconds</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div>
+        <h3>Item enters the queue</h3>
+        <p>A post or comment is reported or flagged by AutoMod. QueueVision's event triggers capture it instantly and compute a risk score based on report count, account signals, and content flags.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div>
+        <h3>Mod opens QueueVision</h3>
+        <p>Tap "Investigate with QueueVision" from any post or comment menu. The app opens in a full-screen webview with the item pre-loaded - no navigation required.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div>
+        <h3>Full context loads instantly</h3>
+        <p>ThreadRecon shows the conversation. UserRadar shows the author's history. ModTrail shows prior actions. All fetched in parallel from Reddit API with Redis caching for speed.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div>
+        <h3>Claim and act</h3>
+        <p>Claim the item to signal your team. Then tap a macro - Approve, Remove, Ban, or Warn. High-risk actions show a 3-second undo banner before executing.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">5</div>
+      <div>
+        <h3>Audit trail recorded</h3>
+        <p>Every action is logged to ModTrail with timestamp and moderator identity. The next mod who opens the item sees exactly what happened and why.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- CTA -->
+<div style="height:64px"></div>
+<div class="cta-banner">
+  <h2>Ready to fix your modqueue?</h2>
+  <p>Install QueueVision on your subreddit in under a minute. No configuration, no API keys, no setup.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+    <a href="app/index.html" class="btn btn-ghost">Open App &rarr;</a>
+    <a href="https://github.com/Tasfia-17/QueueVision" target="_blank" class="btn btn-ghost">View Source</a>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer>
+  <div>
+    <strong>QueueVision</strong> - Built for Reddit Mod Tools &amp; Migrated Apps Hackathon 2026
+  </div>
+  <div style="display:flex;gap:20px">
+    <a href="https://github.com/Tasfia-17/QueueVision" target="_blank">GitHub</a>
+    <a href="https://developers.reddit.com/docs/devvit" target="_blank">Devvit Docs</a>
+    <span>Apache 2.0</span>
+  </div>
+</footer>
+
+</body>
+</html>
