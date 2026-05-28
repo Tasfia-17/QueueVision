@@ -7,7 +7,7 @@
       "default": { "entry": "index.html", "height": "tall" }
     }
   },
-  "server": { "entry": "dist/server/index.js" },
+  "server": { "dir": "dist/server", "entry": "index.js" },
   "permissions": {
     "redis": true,
     "realtime": true,
