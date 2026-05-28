@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developers.reddit.com/schema/config-file.v1.json",
+  "name": "queuevision",
+  "post": {
+    "dir": "public",
+    "entrypoints": {
+      "default": { "entry": "index.html", "height": "tall" }
+    }
+  },
+  "server": { "entry": "dist/server/index.js" },
+  "permissions": {
+    "redis": true,
+    "realtime": true,
+    "reddit": { "enable": true, "scope": "moderator" },
+    "http": { "enable": true, "domains": [] }
+  },
+  "triggers": {
+    "onPostReport":                 "/internal/triggers/post-report",
+    "onCommentReport":              "/internal/triggers/comment-report",
+    "onModAction":                  "/internal/triggers/mod-action",
+    "onPostCreate":                 "/internal/triggers/post-create",
+    "onAutomoderatorFilterPost":    "/internal/triggers/automod-post",
+    "onAutomoderatorFilterComment": "/internal/triggers/automod-comment",
+    "onAppInstall":                 "/internal/triggers/app-install"
+  },
+  "menu": {
+    "items": [
+      {
+        "label": "🔍 Investigate with QueueVision",
+        "description": "Full context: thread, user history, mod notes",
+        "forUserType": "moderator",
+        "location": ["post", "comment"],
+        "endpoint": "/internal/menu/investigate"
+      },
+      {
+        "label": "⚡ Quick Action",
+        "description": "Execute a moderation macro",
+        "forUserType": "moderator",
+        "location": ["post", "comment"],
+        "endpoint": "/internal/menu/quick-action"
+      },
+      {
+        "label": "⚙️ QueueVision Settings",
+        "forUserType": "moderator",
+        "location": "subreddit",
+        "endpoint": "/internal/menu/settings"
+      }
+    ]
+  },
+  "forms": {
+    "macroBuilderForm": "/internal/forms/macro-builder",
+    "claimNoteForm":    "/internal/forms/claim-note"
+  },
+  "scheduler": {
+    "tasks": {
+      "daily-cleanup":  { "endpoint": "/internal/scheduler/daily-cleanup",  "cron": "0 2 * * *"    },
+      "claim-timeout":  { "endpoint": "/internal/scheduler/claim-timeout",  "cron": "*/5 * * * *"  },
+      "mod-team-sync":  { "endpoint": "/internal/scheduler/mod-team-sync",  "cron": "0 */6 * * *"  }
+    }
+  },
+  "marketingAssets": { "icon": "assets/icon.svg" },
+  "scripts": {
+    "dev":   "concurrently \"vite build --watch\" \"tsc -p tsconfig.server.json --watch\"",
+    "build": "vite build && tsc -p tsconfig.server.json"
+  }
+}
